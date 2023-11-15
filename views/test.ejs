@@ -1,0 +1,21 @@
+<!-- index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Total Balance</title>
+  <style>
+    /* Add your CSS styles here */
+    .negative-balance {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Total Balance</h1>
+  
+  <p>Total Balance: $<span class="<%= totalBalance < 0 ? 'negative-balance' : '' %>"><%= totalBalance %></span></p>
+</body>
+</html>

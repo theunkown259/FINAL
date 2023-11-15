@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Budget Buddy</title>
+        <link rel="stylesheet" type="text/css" href="/css/main.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body>
+        <header>
+            <a href="#" class="logo">Budget Buddy</a>
+
+                <ul class ="navbar">
+                    <li><a href="#" class="active">Dashboard</a></li>
+                    <li><a href="#">Budget</a></li>
+                    <li><a href="#">Income</a></li>
+                </ul>
+            <a class="logout" href="#"><button>Logout</button></a>
+        </header>
+        <div class="wrapper">
+            <div class="container">
+                <div class="total-amount-container">
+                    <h3>Total Balance </h3>
+                    <span id = "totalBalance"class="<%= totalBalance < 0 ? 'negative-balance' : 'positive-balance' %>">$ <%= totalBalance %></span>
+                </div>
+                <div class="monthly-spending">
+                    <h3>Chart</h3>
+                    <canvas id="myChart"></canvas>
+                    <script>
+                     const transactions = <%- JSON.stringify(transactions) %>;
+
+                     // Extract data for the chart
+                     const incomeData = transactions
+                        .filter(transaction => transaction.type === 'Income')
+                        .map(transaction => transaction.amount);
+
+                     const expenseData = transactions
+                        .filter(transaction => transaction.type === 'Expense')
+                        .map(transaction => transaction.amount);
+
+                     const labels = transactions.map(transaction => transaction.date);
+                     // Create a line chart
+
+                     var ctx = document.getElementById('myChart').getContext('2d');
+                     var chart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Income',
+                                    data: incomeData,
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1,fill: false
+                                },
+                                {
+                                    label: 'Expense',
+                                    data: expenseData,
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    borderWidth: 1,
+                                    fill: false
+                                }
+                            ]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                    </script>
+                </div>
+                <div class="recent-history">
+                    <h3>History</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% newesttransactions.forEach(function(newesttransaction) { %>
+                                <tr>
+                                    <td><%= newesttransaction.date %></td>
+                                    <td><%= newesttransaction.amount %></td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                      </table>
+                      
+                    <a href="9"><button>See More</button></a>
+                </div>
+                <div class="budget-chart">
+                    <h3>Chart</h3>
+                    <canvas id="budget-chart"></canvas>
+                    <script>// Define the data for the chart
+                        var data = {
+                            labels: ['Expenses', 'Budget'],
+                            datasets: [{
+                                label: 'Amount',
+                                data: [500, 1000],
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        };
+                        
+                        // Define the options for the chart
+                        var options = {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        };
+                        
+                        // Create the chart
+                        var ctx = document.getElementById('budget-chart').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: data,
+                            options: options
+                        });
+                        </script>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

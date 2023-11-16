@@ -33,7 +33,7 @@ app.get('/', async(req,res) => {
 
         var totalBalance = totalIncome - totalExpenses;
 
-    res.render('index.ejs', {newesttransactions:last5Transactions, totalBalance,transactions });
+    res.render('index.ejs', {newesttransactions:last5Transactions, totalBalance,transactions,totalExpenses,totalIncome });
     }catch(error){
         res.status(500).send("Oh no! There's a Server Error.");
         console.log("Internal Server Error");

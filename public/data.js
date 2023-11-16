@@ -10,7 +10,11 @@ var transactions = [
     { date: '2023-10-20', type:"Expense", amount: 200 },
     { date: '2023-10-30', type:"Income", amount: 250 },
     { date: '2023-10-15', type:"Income", amount: 150 },
-    { date: '2023-11-05', type:"Exepense", amount: 100 }
+    { date: '2023-11-05', type:"Exepense", amount: 100 },
+    { date: '2023-11-07', type:"Exepense", amount: 200 },
+    { date: '2023-11-07', type:"Budget", amount: 250 },
+    { date: '2023-11-12', type:"Exepense", amount: 100 },
+    
   ];
 
 module.exports = transactions;

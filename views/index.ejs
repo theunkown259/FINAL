@@ -1,145 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Budget Buddy</title>
-        <link rel="stylesheet" type="text/css" href="/css/main.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    </head>
-    <body>
-        <header>
-            <a href="#" class="logo">Budget Buddy</a>
 
-                <ul class ="navbar">
-                    <li><a href="#" class="active">Dashboard</a></li>
-                    <li><a href="#">Budget</a></li>
-                    <li><a href="#">Income</a></li>
-                </ul>
-            <a class="logout" href="#"><button>Logout</button></a>
-        </header>
-        <div class="wrapper">
-            <div class="container">
-                <div class="total-amount-container">
-                    <h3>Total Balance </h3>
-                    <span id = "totalBalance"class="<%= totalBalance < 0 ? 'negative-balance' : 'positive-balance' %>">$ <%= totalBalance %></span>
-                </div>
-                <div class="monthly-spending">
-                    <h3>Chart</h3>
-                    <canvas id="myChart"></canvas>
-                    <script>
-                     const transactions = <%- JSON.stringify(transactions) %>;
 
-                     // Extract data for the chart
-                     const incomeData = transactions
-                        .filter(transaction => transaction.type === 'Income')
-                        .map(transaction => transaction.amount);
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Buddy</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,900,300">
+  <link rel="stylesheet" type="text/css" href="/css/main.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
 
-                     const expenseData = transactions
-                        .filter(transaction => transaction.type === 'Expense')
-                        .map(transaction => transaction.amount);
 
-                     const labels = transactions.map(transaction => transaction.date);
-                     // Create a line chart
+<body>
 
-                     var ctx = document.getElementById('myChart').getContext('2d');
-                     var chart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: labels,
-                            datasets: [
-                                {
-                                    label: 'Income',
-                                    data: incomeData,
-                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                    borderWidth: 1,fill: false
-                                },
-                                {
-                                    label: 'Expense',
-                                    data: expenseData,
-                                    borderColor: 'rgba(255, 99, 132, 1)',
-                                    borderWidth: 1,
-                                    fill: false
+
+  <header>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Budget Buddy</a>
+      <div class="ml-auto">
+        <a href="#"><i class="menu-icon fas fa-bell"></i></a>
+        <a href="#"><i class="menu-icon fas fa-cog"></i></a>
+        <a href="#"><i class="menu-icon fas fa-sign-out-alt"></i></a>
+      </div>
+      <div class="user-profile">
+        <img src="profile2.png" alt="User" width="40" height="40">
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- Menu Section -->
+  <div class="menu-section">
+    <div class="menu-item">
+      <i class="menu-icon fas fa-home"></i>
+      <a href="#" class="nav-link">Home</a>
+    </div>
+    <div class="menu-item">
+      <i class="menu-icon fas fa-list"></i>
+      <a href="#" class="nav-link">Categories</a>
+    </div>
+    <div class="menu-item">
+      <i class="menu-icon fas fa-file-invoice-dollar"></i>
+      <a href="#" class="nav-link">Transactions</a>
+    </div>    
+    <div class="menu-item">
+      <i class="menu-icon fas fa-plus"></i>
+      <a href="#" class="nav-link">Add Income</a>
+    </div>
+    <div class="menu-item">
+      <i class="menu-icon fas fa-minus"></i>
+      <a href="#" class="nav-link">Add Expense</a>
+    </div>
+  </div>
+
+
+  <main class="container">
+    <div class="wrapper">
+        <div class="container">
+            <div class="total-amount-container">
+                <h3>Total Balance </h3>
+                <span id = "totalBalance"class="<%= totalBalance < 0 ? 'negative-balance' : 'positive-balance' %>">$ <%= totalBalance %></span>
+                <a href="##"><button>Is there a problem? Fix it</button></a>
+            </div>
+            <div class="monthly-spending">
+                <h3>Chart</h3>
+                <canvas id="myChart"></canvas>
+                <script>
+                  var totalIncome = <%= totalIncome %>;
+                  var totalExpenses = <%= totalExpenses %>;
+
+                  var data = {
+                    labels: ['Income', 'Expenses'],
+                    datasets: [{
+                        data: [totalIncome, totalExpenses],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+
+                var options = {
+                    cutoutPercentage: 80,
+                    legend: {
+                        position: 'bottom'
+                    }
+                };
+
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: data,
+                    options: options
+                });
+                </script>
+            </div>
+            <div class="recent-history">
+                <h3>History</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% newesttransactions.forEach(function(newesttransaction) { %>
+                            <tr>
+                                <td><%= newesttransaction.date %></td>
+                                <td><%= newesttransaction.amount %></td>
+                                <td><%= newesttransaction.type %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+                
+                  
+                <a href="##"><button>See More</button></a>
+            </div>
+            <div class="budget-chart">
+                <h3>Chart</h3>
+                <canvas id="budget-chart"></canvas>
+                <script>// Define the data for the chart
+                    var data = {
+                        labels: ['Expenses', 'Budget'],
+                        datasets: [{
+                            label: 'Amount',
+                            data: [400, 650],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)'
+                            ],
+                            borderWidth: 2
+                        }]
+                    };
+                    
+                    // Define the options for the chart
+                    var options = {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
                                 }
-                            ]
-                        },
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }]
-                            }
+                            }]
                         }
+                    };
+                    
+                    // Create the chart
+                    var ctx = document.getElementById('budget-chart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: data,
+                        options: options
                     });
                     </script>
-                </div>
-                <div class="recent-history">
-                    <h3>History</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% newesttransactions.forEach(function(newesttransaction) { %>
-                                <tr>
-                                    <td><%= newesttransaction.date %></td>
-                                    <td><%= newesttransaction.amount %></td>
-                                </tr>
-                            <% }); %>
-                        </tbody>
-                      </table>
-                      
-                    <a href="9"><button>See More</button></a>
-                </div>
-                <div class="budget-chart">
-                    <h3>Chart</h3>
-                    <canvas id="budget-chart"></canvas>
-                    <script>// Define the data for the chart
-                        var data = {
-                            labels: ['Expenses', 'Budget'],
-                            datasets: [{
-                                label: 'Amount',
-                                data: [500, 1000],
-                                backgroundColor: [
-                                    'rgba(255, 99, 132, 0.2)',
-                                    'rgba(54, 162, 235, 0.2)'
-                                ],
-                                borderColor: [
-                                    'rgba(255, 99, 132, 1)',
-                                    'rgba(54, 162, 235, 1)'
-                                ],
-                                borderWidth: 1
-                            }]
-                        };
-                        
-                        // Define the options for the chart
-                        var options = {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }]
-                            }
-                        };
-                        
-                        // Create the chart
-                        var ctx = document.getElementById('budget-chart').getContext('2d');
-                        var myChart = new Chart(ctx, {
-                            type: 'bar',
-                            data: data,
-                            options: options
-                        });
-                        </script>
-                </div>
             </div>
         </div>
-    </body>
+    </div>
+  </main>
+
+
+  <footer class="footer">
+    <div class="container">
+      <span class="text-muted">Copyright © 2023 Budget Buddy</span>
+    </div>
+  </footer>
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"
+    integrity="sha512-TPh2Oxlg1zp+kz3nFA0C5vVC6leG/6mm1z9+mA81MI5eaUVqasPLO8Cuk4gMF4gUfP5etR73rgU/8PNMsSesoQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+
 </html>

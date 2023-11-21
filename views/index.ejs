@@ -79,11 +79,18 @@
                     <tbody>
                         <% newesttransactions.forEach(function(newesttransaction) { %>
                             <tr>
-                                <td><%= newesttransaction.date %></td>
-                                <td><%= newesttransaction.amount %></td>
-                                <td><%= newesttransaction.type %></td>
+                                <td>
+                                    <% if (newesttransaction.date) { %>
+                                        <%= newesttransaction.date %>
+                                    <% } else { %>
+                                        Date Not Available
+                                    <% } %>
+                                </td>
+                                <td><%= newesttransaction.Amount %></td>
+                                <td><%= newesttransaction.Type %></td>
                             </tr>
                         <% }); %>
+                                                
                     </tbody>
                 </table>
                 <a href="##"><button>See More</button></a>

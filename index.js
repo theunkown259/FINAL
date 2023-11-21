@@ -1,10 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { MongoClient } = require('mongodb');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
-const transactions = require('./public/data');
 const {db} = require('./db.js');
+
 const app = express();
 app.set('views','./views');
 app.set('view engine','ejs');
@@ -25,7 +24,7 @@ const testingSchema = new mongoose.Schema({
     Type: String,
     Amount: Number,
     Currency: Number,
-    date: String,
+    date: { type: Date, default: Date.now },
     Description: String,
 });
 
@@ -33,24 +32,27 @@ const Testingmodel = mongoose.model('testings',testingSchema);
 
 // Start the server
 app.get('/', async(req,res) => {
+    const usernum = 2;
     try{
-        db();
+        await db();
         ///
-        const query = Testingmodel.find({});
-  
-        let files = await query.lean().exec();
-          console.log(files)
+        const transactions = await Testingmodel.find({UserId:usernum}).lean().exec();
         //recent History
 
-        var last5Transactions = transactions.slice(-5);
+        const last5Transactions = await Testingmodel.find({UserId:usernum})
+        .sort({ date: -1 })
+        .limit(5)
+        .lean()
+        .exec();
+
 
         const totalIncome = transactions
-            .filter(transaction => transaction.type === 'Income')
-            .reduce((sum, transaction) => sum + transaction.amount, 0);
+            .filter(transaction => transaction.Type === 'Income')
+            .reduce((sum, transaction) => sum + transaction.Amount, 0);
 
         const totalExpenses = transactions
-            .filter(transaction => transaction.type === 'Expense')
-            .reduce((sum, transaction) => sum + transaction.amount, 0);
+            .filter(transaction => transaction.Type === 'Expense')
+            .reduce((sum, transaction) => sum + transaction.Amount, 0);
 
         var totalBalance = totalIncome - totalExpenses;
 

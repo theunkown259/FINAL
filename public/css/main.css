@@ -140,25 +140,28 @@ body {
     grid-gap: 20px;
     gap: 50px;
 }
-.total-amount-container, .monthly-spending,.recent-history,.budget-chart{
+.total-amount-container,.recent-history,.budget-chart,.monthly-spending{
   background-color: gainsboro;
   padding: 1.25em 0.9em;
-  border-radius: 0.3em;
   box-shadow: 0 0.6em 1.2em rgba(28, 0, 80, 0.06);
 }
-.budget-chart, .monthly-spending{
-    width:max-content;
-    height: max-content;
+#no-data{
+    padding-left: 40px;
+    padding-right: 40px;
+    font-weight: 300;
+}
+.monthly-spending{
+    padding-left: 40px;
+    padding-right: 40px;
+    font-weight: 300;
+    width: max-content;
 }
 #totalBalance{
     font-size: 2em;
     font-weight: 500;
     padding-left: 50%;
 }
-.recent-history{
-    grid-row: 2;
-    grid-column: 1;
-}
+
 .negative-balance {
     color: red;
 }

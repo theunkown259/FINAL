@@ -66,44 +66,6 @@
                 <span id = "totalBalance"class="<%= totalBalance < 0 ? 'negative-balance' : 'positive-balance' %>">$ <%= totalBalance %></span>
                 <a href="##"><button>Is there a problem? Fix it</button></a>
             </div>
-            <div class="monthly-spending">
-                <h3>Chart</h3>
-                <canvas id="myChart"></canvas>
-                <script>
-                  var totalIncome = <%= totalIncome %>;
-                  var totalExpenses = <%= totalExpenses %>;
-
-                  var data = {
-                    labels: ['Income', 'Expenses'],
-                    datasets: [{
-                        data: [totalIncome, totalExpenses],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                };
-
-                var options = {
-                    cutoutPercentage: 80,
-                    legend: {
-                        position: 'bottom'
-                    }
-                };
-
-                var ctx = document.getElementById('myChart').getContext('2d');
-                var myChart = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: data,
-                    options: options
-                });
-                </script>
-            </div>
             <div class="recent-history">
                 <h3>History</h3>
                 <table>
@@ -124,8 +86,6 @@
                         <% }); %>
                     </tbody>
                 </table>
-                
-                  
                 <a href="##"><button>See More</button></a>
             </div>
             <div class="budget-chart">
@@ -165,14 +125,63 @@
                     var myChart = new Chart(ctx, {
                         type: 'bar',
                         data: data,
-                        options: options
+                        options:{
+                            legend: false,
+                            datalabels: false,
+                            noData: {
+                            text: 'No Data to Show',
+                            fontSize: 16,
+                            fontStyle: 'bold'
+                            }
+                        }
                     });
                     </script>
+            </div>
+            <div class="monthly-spending">
+                <h3>Chart</h3>
+                <% if (transactions && transactions.length > 0) { %>
+                    <canvas id="myChart"></canvas>
+                <% } else { %>
+                    <p id = "no-data">No Data to Show</p>
+                <% } %>
+                <script>
+                  var totalIncome = <%= totalIncome %>;
+                  var totalExpenses = <%= totalExpenses %>;
+
+                  var data = {
+                    labels: ['Income', 'Expenses'],
+                    datasets: [{
+                        data: [totalIncome, totalExpenses],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+
+                var options = {
+                    cutoutPercentage: "70%",
+                    legend: {
+                        position: 'bottom'
+                    }
+                };
+
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: data,
+                    options: options
+                });
+                </script>
             </div>
         </div>
     </div>
   </main>
-
 
   <footer class="footer">
     <div class="container">

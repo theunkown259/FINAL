@@ -16,11 +16,32 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+
+///
+const testingSchema = new mongoose.Schema({
+    TransactionId: Number,
+    UserId: Number,
+    CategoryId: Number,
+    Type: String,
+    Amount: Number,
+    Currency: Number,
+    date: String,
+    Description: String,
+});
+
+const Testingmodel = mongoose.model('testings',testingSchema);
+
 // Start the server
 app.get('/', async(req,res) => {
     try{
         db();
+        ///
+        const query = Testingmodel.find({});
+  
+        let files = await query.lean().exec();
+          console.log(files)
         //recent History
+
         var last5Transactions = transactions.slice(-5);
 
         const totalIncome = transactions

@@ -144,6 +144,39 @@
                     });
                     </script>
             </div>
+            <div class="remaning-budget">
+                <h1>Budget Categories</h1>
+                <form action="/" method="get" id="categoryForm">
+                    <label for="categoryCount">Select categories shown</label>
+                    <select id="categoryCount" name="count" onchange="document.getElementById('categoryForm').submit()">
+                        <option value="1" <%= count === 1 ? 'selected' : '' %>>1</option>
+                        <option value="2" <%= count === 2 ? 'selected' : '' %>>2</option>
+                        <option value="3" <%= count === 3 ? 'selected' : '' %>>3</option>
+                    </select>
+                </form>
+                <table>
+                    <tr>
+                        <th>Category</th>
+                        <th>Budget</th>
+                        <th>Spent</th>
+                        <th>Remaining Budget</th>
+                    </tr>
+                        <% categoriesWithRemainingBudget.forEach(category => { %>
+                    <tr>
+                        <td><%= category.name %></td>
+                        <td><%= category.budget %></td>
+                        <td><%= category.spent %></td>
+                        <td>
+                    <% if (category.remainingBudget <= 0) { %>
+                        <span style="color: red;"><%= category.remainingBudget %> (Over Budget)</span>
+                    <% } else { %>
+                        <%= category.remainingBudget %>
+                    <% } %>
+                        </td>
+                    </tr>
+                 <% }); %>
+                </table>
+            </div>
             <div class="monthly-spending">
                 <h3>Chart</h3>
                 <% if (transactions && transactions.length > 0) { %>

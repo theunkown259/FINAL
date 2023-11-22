@@ -29,13 +29,32 @@ const testingSchema = new mongoose.Schema({
 });
 
 const Testingmodel = mongoose.model('testings',testingSchema);
+// Sample data (replace this with your actual budget data)
+const budgetCategories = [
+    { name: 'Groceries', budget: 500, spent: 300 },
+    { name: 'Entertainment', budget: 200, spent: 180 },
+    { name: 'Gifts', budget: 100, spent: 120 },
+    { name: 'Take-out', budget: 50, spent: 10 },
+    { name: 'New Computer', budget: 600, spent: 0 },
+    // Add more categories as needed
+];
 
+// Calculate remaining budget for each category
+const categoriesWithRemainingBudget = budgetCategories.map(category => {
+    const remainingBudget = category.budget - category.spent;
+    return { ...category, remainingBudget };
+});
+const sortedCategories = categoriesWithRemainingBudget.sort((a, b) => a.remainingBudget - b.remainingBudget);
 // Start the server
 app.get('/', async(req,res) => {
     const usernum = 2;
     try{
         await db();
-        ///
+        const count = parseInt(req.query.count, 10) || 3;
+
+        // Slice the array to get the specified number of categories
+        const slicedCategories = sortedCategories.slice(0, count);
+
         const transactions = await Testingmodel.find({UserId:usernum}).lean().exec();
         //recent History
 
@@ -56,7 +75,7 @@ app.get('/', async(req,res) => {
 
         var totalBalance = totalIncome - totalExpenses;
 
-    res.render('index.ejs', {newesttransactions:last5Transactions, totalBalance,transactions,totalExpenses,totalIncome });
+    res.render('index.ejs', {newesttransactions:last5Transactions, totalBalance,transactions,totalExpenses,totalIncome, categoriesWithRemainingBudget:slicedCategories,count });
     }catch(error){
         res.status(500).send("Oh no! There's a Server Error.");
         console.log("Internal Server Error");

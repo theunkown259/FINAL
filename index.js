@@ -64,7 +64,6 @@ app.get('/', async(req,res) => {
         .lean()
         .exec();
 
-
         const totalIncome = transactions
             .filter(transaction => transaction.Type === 'Income')
             .reduce((sum, transaction) => sum + transaction.Amount, 0);
@@ -75,7 +74,20 @@ app.get('/', async(req,res) => {
 
         var totalBalance = totalIncome - totalExpenses;
 
-    res.render('index.ejs', {newesttransactions:last5Transactions, totalBalance,transactions,totalExpenses,totalIncome, categoriesWithRemainingBudget:slicedCategories,count });
+        const expenses = transactions
+            .filter(transaction => transaction.Type === 'Expense')
+
+        // Calculate categoryLabels and categoryAmounts
+        const categoryLabels = Array.from(new Set(expenses.map(expense => expense.CategoryId)));
+        const categoryAmounts = categoryLabels.map(categoryId =>
+            expenses.filter(expense => expense.CategoryId === categoryId)
+            .reduce((total, expense) => total + expense.Amount, 0)
+        );
+
+
+
+    res.render('index.ejs', {newesttransactions:last5Transactions, totalBalance,transactions,totalExpenses,totalIncome, categoriesWithRemainingBudget:slicedCategories,count,categoryLabels, categoryAmounts });
+
     }catch(error){
         res.status(500).send("Oh no! There's a Server Error.");
         console.log("Internal Server Error");

@@ -5,31 +5,31 @@ body {
     font-size: 14px;
     line-height: 1.428571429;
     color: #6a6c6f;
-  }
+}
 
-  .navbar {
+.navbar {
     padding: 10px;
-  }
+}
 
-  .navbar-brand {
+.navbar-brand {
     flex-grow: 1;
     color: white!important;
     font-weight: 700;
-  }
+}
 
-  .user-profile {
+.user-profile {
     display: flex;
     align-items: center;
     margin: 0 0 0 20px;
-  }
+}
 
 
-  .user-profile img {
+.user-profile img {
     border-radius: 50%;
-  }
+}
 
 
-  .menu-section {
+.menu-section {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -37,40 +37,40 @@ body {
     width: 100%;
     -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, .08);
     box-shadow: 0 2px 4px rgba(0, 0, 0, .08);
-  }
+}
 
 
-  .menu-item {
+.menu-item {
     flex: 1;
     text-align: center;
     padding: 18px 15px 15px;
-  }
+}
 
 
-  .menu-item:hover {
+.menu-item:hover {
     background-color: rgba(237,240,245,.5);
     color: #10c469;
-  }
+}
 
 
-  .menu-item a {
+.menu-item a {
     color: #6a6c6f;
-  }
+}
 
 
-  .menu-item a:hover {
+.menu-item a:hover,.fa-home {
     color: #10c469;
-  }
+}
 
 
-  .menu-icon {
+.menu-icon {
     font-size: 1.5rem;
     display: block;
     margin-bottom: 5px;
-  }
+}
 
 
-  .footer {
+.footer {
     position: fixed;
     left: 0;
     bottom: 0;
@@ -78,42 +78,44 @@ body {
     background-color: #f5f5f5;
     color: #8a8a8a;
     text-align: center;
+    justify-content: center;
+    align-items: center;
     padding: 10px 0;
     border-top: 1px solid #e7e7e7;
-  }
+}
 
 
-  .ml-auto a {
+.ml-auto a {
     color: white;
-  }
+}
 
 
-  .ml-auto a:hover {
+.ml-auto a:hover {
     color: white;
-  }
+}
 
 
-  .ml-auto,
-  .mx-auto {
+.ml-auto,
+.mx-auto {
     display: flex;
     gap: 20px;
-  }
+}
 
 
-  .bg-light {
+.bg-light {
     background-color: #10c469!important;
-  }
+}
 
 
-  .menu-item .fa-solid,
-  .fas {
+.menu-item .fa-solid,
+.fas {
     font-size: 16px;
-  }
+}
 
 
-  .nav-link {
+.nav-link {
     padding: 0;
-  }
+}
 
 
   /* Responsive adjustments */
@@ -140,7 +142,7 @@ body {
     grid-gap: 20px;
     gap: 50px;
 }
-.total-amount-container,.recent-history,.budget-chart,.monthly-spending,.remaning-budget{
+.total-amount-container,.recent-history,.budget-chart,.monthly-spending,.remaning-budget,.expense-category{
   background-color: gainsboro;
   padding: 1.25em 0.9em;
   box-shadow: 0 0.6em 1.2em rgba(28, 0, 80, 0.06);

@@ -4,6 +4,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Budget Buddy</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -11,6 +12,7 @@
   <link rel="stylesheet" type="text/css" href="/css/main.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
 </head>
 
 
@@ -177,6 +179,38 @@
                  <% }); %>
                 </table>
             </div>
+            <div class="expense-category">
+                <h1>Expense in Each Category </h1>
+                <canvas id="myPieChart"></canvas>
+            
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var data = {
+                            labels: <%= JSON.stringify(categoryLabels) %>,
+                            datasets: [{
+                                data: <%= JSON.stringify(categoryAmounts) %>,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    // Add more colors as needed
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    // Add more colors as needed
+                                ],
+                                borderWidth: 1
+                            }]
+                        };
+            
+                        var ctx = document.getElementById('myPieChart').getContext('2d');
+                        var myPieChart = new Chart(ctx, {
+                            type: 'pie',
+                            data: data,
+                        });
+                    });
+                </script>
+            </div>
             <div class="monthly-spending">
                 <h3>Chart</h3>
                 <% if (transactions && transactions.length > 0) { %>
@@ -224,9 +258,7 @@
   </main>
 
   <footer class="footer">
-    <div class="container">
       <span class="text-muted">Copyright © 2023 Budget Buddy</span>
-    </div>
   </footer>
 
 

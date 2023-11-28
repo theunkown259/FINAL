@@ -42,7 +42,17 @@ app.get('/', async (req, res) => {
         // Slice the array to get the specified number of categories
         const slicedCategories = sortedCategories.slice(0, count);
 
-        const transactions = await Testingmodel.find({ UserId: usernum }).lean().exec();
+        const transactions = await Testingmodel.aggregate([
+            { $match: { 'Transactions.UserId': usernum } },
+            { $unwind: '$Transactions' },
+            {$project: {
+                'Transactions.Type': 1,
+                'Transactions.Amount': 1,
+              },
+            }
+        ]).exec();
+
+
         //recent History
 
         const last5Transactions = await Testingmodel.aggregate([
@@ -59,20 +69,21 @@ app.get('/', async (req, res) => {
             },
           ]).exec();
           
-console.log(last5Transactions)
 
-        const totalIncome = transactions
-            .filter(transaction => transaction.Type === 'Income')
-            .reduce((sum, transaction) => sum + transaction.Amount, 0);
+          const totalIncome = transactions
+              .filter(transaction => transaction.Transactions.Type === 'Income')
+              .reduce((sum, transaction) => sum + transaction.Transactions.Amount, 0);
+          
+          const totalExpenses = transactions
+              .filter(transaction => transaction.Transactions.Type === 'Expense')
+              .reduce((sum, transaction) => sum + transaction.Transactions.Amount, 0);
+          
+          var totalBalance = totalIncome - totalExpenses;
 
-        const totalExpenses = transactions
-            .filter(transaction => transaction.Type === 'Expense')
-            .reduce((sum, transaction) => sum + transaction.Amount, 0);
 
-        var totalBalance = totalIncome - totalExpenses;
-
-        const expenses = transactions
-            .filter(transaction => transaction.Type === 'Expense');
+          const expenses = transactions
+              .filter(transaction => transaction.Transactions.Type === 'Expense');
+          
 
         // Calculate categoryLabels and categoryAmounts
         const categoryLabels = Array.from(new Set(expenses.map(expense => expense.CategoryId)));

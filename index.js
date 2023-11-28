@@ -43,21 +43,29 @@ app.get('/', async (req, res) => {
         const slicedCategories = sortedCategories.slice(0, count);
 
         const transactions = await Testingmodel.aggregate([
-            { $match: { 'Transactions.UserId': usernum } },
             { $unwind: '$Transactions' },
-            {$project: {
-                'Transactions.Type': 1,
-                'Transactions.Amount': 1,
-              },
-            }
+            {
+                $match: {
+                    'Transactions.UserId': usernum,
+                },
+            },
+            {
+                $project: {
+                    'Transactions.CategoryId': 1,
+                    'Transactions.Type': 1,
+                    'Transactions.Amount': 1,
+                    'Transactions.Currency': 1,
+                    'Transactions.Date': 1,
+                    'Transactions.Description': 1,
+                },
+            },
         ]).exec();
-
-
+        
         //recent History
 
         const last5Transactions = await Testingmodel.aggregate([
-            { $match: { 'Transactions.UserId': usernum } },
             { $unwind: '$Transactions' },
+            { $match: { 'Transactions.UserId': usernum } },
             { $sort: { 'Transactions.Date': -1 } },
             { $limit: 5 },
             {
@@ -69,7 +77,7 @@ app.get('/', async (req, res) => {
             },
           ]).exec();
           
-
+          //total balance
           const totalIncome = transactions
               .filter(transaction => transaction.Transactions.Type === 'Income')
               .reduce((sum, transaction) => sum + transaction.Transactions.Amount, 0);
@@ -81,18 +89,15 @@ app.get('/', async (req, res) => {
           var totalBalance = totalIncome - totalExpenses;
 
 
-          const expenses = transactions
-              .filter(transaction => transaction.Transactions.Type === 'Expense');
-          
-
         // Calculate categoryLabels and categoryAmounts
-        const categoryLabels = Array.from(new Set(expenses.map(expense => expense.CategoryId)));
-        const categoryDescription = Array.from(new Set(expenses.map(expense => expense.Description)));
+        const categoryLabels = Array.from(new Set(transactions.map(transaction => transaction.Transactions.CategoryId)));
+        const categoryDescription = Array.from(new Set(transactions.map(transaction => transaction.Transactions.Description))); 
         const categoryAmounts = categoryLabels.map(categoryId =>
-            expenses.filter(expense => expense.CategoryId === categoryId)
-                .reduce((total, expense) => total + expense.Amount, 0)
+            transactions
+                .filter(transaction => transaction.Transactions.CategoryId === categoryId)
+                .reduce((total, transaction) => total + transaction.Transactions.Amount, 0)
         );
-
+        
         res.render('index.ejs', {
            last5Transactions,
             totalBalance,

@@ -149,7 +149,7 @@
                 <h1>Budget Categories</h1>
                 <form action="/" method="get" id="categoryForm">
                     <label for="categoryCount">Select categories shown</label>
-                    <select id="categoryCount" name="count" onchange="document.getElementById('categoryForm').submit()">
+                    <select id="categoryCount" name="count" onchange="updateLocalStorage(); document.getElementById('categoryForm').submit();">
                         <option value="1" <%= count === 1 ? 'selected' : '' %>>1</option>
                         <option value="2" <%= count === 2 ? 'selected' : '' %>>2</option>
                         <option value="3" <%= count === 3 ? 'selected' : '' %>>3</option>
@@ -231,6 +231,14 @@
                 <% } else { %>
                     <p id = "no-data">No Data to Show</p>
                 <% } %>
+                <form action="/" method="get" id="timePeriodForm">
+                    <label for="timePeriod">Select Time Period:</label>
+                    <select id="timePeriod" name="timePeriod" onchange="updateLocalStorage(); document.getElementById('timePeriodForm').submit();">
+                      <option value="All" <%= timePeriod === 'All' ? 'selected' : '' %>>All Time</option>
+                      <option value="7" <%= timePeriod === '7' ? 'selected' : '' %>>Last 7 Days</option>
+                      <option value="30" <%= timePeriod === '30' ? 'selected' : '' %>>Last 30 Days</option>
+                    </select>
+                  </form>
                 <script>
                   var totalIncome = <%= totalIncome %>;
                   var totalExpenses = <%= totalExpenses %>;
@@ -268,6 +276,28 @@
             </div>
         </div>
     </div>
+    <script>
+    // Function to update local storage with the selected time period
+    function updateLocalStorage() {
+      var selectedTimePeriod = document.getElementById('timePeriod').value;
+      var selectedcategoryCount = document.getElementById('categoryCount').value;
+      localStorage.setItem('selectedTimePeriod', selectedTimePeriod);
+      localStorage.setItem('selectedcategoryCount', selectedcategoryCount);
+    }
+
+    // Check if there is a saved time period in local storage and set the dropdown value
+    document.addEventListener('DOMContentLoaded', function () {
+      var savedTimePeriod = localStorage.getItem('selectedTimePeriod');
+      var savedcategoryCount = localStorage.getItem('selectedcategoryCount');
+      if (savedTimePeriod) {
+        document.getElementById('timePeriod').value = savedTimePeriod;
+      }
+      if (savedcategoryCount) {
+        document.getElementById('categoryCount').value = savedcategoryCount;
+      }
+    });
+    
+    </script>
   </main>
 
   <footer class="footer">

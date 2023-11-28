@@ -38,6 +38,7 @@ app.get('/', async (req, res) => {
     try {
         await db();
         const count = parseInt(req.query.count, 10) || 3;
+        const timePeriod = parseInt(req.query.period, 10) || 3;
 
         // Slice the array to get the specified number of categories
         const slicedCategories = sortedCategories.slice(0, count);
@@ -106,6 +107,7 @@ app.get('/', async (req, res) => {
             totalIncome,
             categoriesWithRemainingBudget: slicedCategories,
             count,
+            timePeriod,
             categoryLabels,
             categoryAmounts,
             categoryDescription

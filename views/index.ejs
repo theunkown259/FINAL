@@ -233,7 +233,7 @@
                 <% } %>
                 <form action="/" method="get" id="timePeriodForm">
                     <label for="timePeriod">Select Time Period:</label>
-                    <select id="timePeriod" name="timePeriod" onchange="updateLocalStorage(); document.getElementById('timePeriodForm').submit();">
+                    <select id="timePeriod" name="timePeriod" onchange="updateLocalStorage(); updateChart(this);">
                       <option value="All" <%= timePeriod === 'All' ? 'selected' : '' %>>All Time</option>
                       <option value="7" <%= timePeriod === '7' ? 'selected' : '' %>>Last 7 Days</option>
                       <option value="30" <%= timePeriod === '30' ? 'selected' : '' %>>Last 30 Days</option>
@@ -242,6 +242,7 @@
                 <script>
                   var totalIncome = <%= totalIncome %>;
                   var totalExpenses = <%= totalExpenses %>;
+
 
                   var data = {
                     labels: ['Income', 'Expenses'],
@@ -255,7 +256,7 @@
                             'rgba(255, 99, 132, 1)',
                             'rgba(54, 162, 235, 1)'
                         ],
-                        borderWidth: 1
+                        borderWidth: 1,
                     }]
                 };
 
@@ -272,6 +273,14 @@
                     data: data,
                     options: options
                 });
+                const periodData = document.getElementById('timePeriod');
+                function updateChart(){
+                    console.log(document.getElementById('timePeriod').value)
+                    var chartData = periodData.value === 'All' ? '<%=totalIncome %>,<%=totalExpenses %>':periodData.value === '7' ? '<%=totalIncomeLast7Days %>,<%=totalExpensesLast7Days %>':'<%=totalIncomeLast30Days %>,<%=totalExpensesLast30Days %>';
+                    console.log(chartData);
+                    myChart.data.datasets[0].data = chartData.split(',');
+                    myChart.update();
+                }
                 </script>
             </div>
         </div>

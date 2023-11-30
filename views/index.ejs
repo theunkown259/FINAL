@@ -114,7 +114,7 @@
                         };
             
                         var chart2 = document.getElementById('myPieChart').getContext('2d');
-                        var myPieChart = new Chart(chart2, {
+                        var myChart2 = new Chart(chart2, {
                             type: 'pie',
                             data: data,
                             options:{
@@ -172,7 +172,7 @@
                 };
 
                 var chart3 = document.getElementById('myChart').getContext('2d');
-                var myChart = new Chart(chart3, {
+                var myChart3 = new Chart(chart3, {
                     type: 'doughnut',
                     data: data,
                     options: options
@@ -187,7 +187,7 @@
                 }
                 </script>
             </div>
-            <div class="recent-history">
+            <div class="recent-history" id="<%= transactions && transactions.length > 0 ? 'data-history' : 'no-data-history' %>">
               <h3>Recent History</h3>
               <table class = "history">
                   <thead>
@@ -226,16 +226,7 @@
                   <p id = "no-data">No Data to Show</p>
               <% } %>
               <script>
-                  
-                  <% let totalBudget = 0; %>
-                  <% let totalSpent = 0; %>
 
-                  <% sortedCategories.forEach(category => { %>
-                  <% totalBudget += category.budget; %>
-                  <% totalSpent += category.spent; %>
-                  <% }); %>;
-
-                  
                   var data = {
                       labels: ['Total Spent', 'Total Budget Amount'],
                       datasets: [{
@@ -255,7 +246,7 @@
                   
 
                   var chart1 = document.getElementById('budget-chart').getContext('2d');
-                  var myChart = new Chart(chart1, {
+                  var myChart1 = new Chart(chart1, {
                       type: 'bar',
                       data: data,
                       options:{
@@ -263,14 +254,15 @@
                               legend:{
                                   display:false
                               }
-                          },        scales: {
-            y: {
-                ticks: {
-                    maxRotation: 10,
-                    minRotation: 10
-                }
-            }
-        },
+                          },
+                           scales: {
+                              y: {
+                                  ticks: {
+                                      maxRotation: 10,
+                                      minRotation: 10
+                                  }
+                              }
+                          },
                           indexAxis:"y",
                           datalabels: false,
                           barThickness:25,

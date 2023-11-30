@@ -31,6 +31,20 @@ const categoriesWithRemainingBudget = budgetCategories.map(category => {
 });
 const sortedCategories = categoriesWithRemainingBudget.sort((a, b) => a.remainingBudget - b.remainingBudget);
 
+function calculateTotals(categories) {
+    let totalBudget = 0;
+    let totalSpent = 0;
+
+    categories.forEach(category => {
+        totalBudget += category.budget;
+        totalSpent += category.spent;
+    });
+
+    return { totalBudget, totalSpent };
+}
+
+const { totalBudget, totalSpent } = calculateTotals(budgetCategories);
+
 app.get('/', async (req, res) => {
     const usernum = 2;
     try {
@@ -141,7 +155,7 @@ app.get('/', async (req, res) => {
             totalExpenses,
             totalIncome,
             categoriesWithRemainingBudget: slicedCategories,
-            sortedCategories,
+            budgetCategories,
             count,
             timePeriod,
             categoryLabels,
@@ -150,7 +164,9 @@ app.get('/', async (req, res) => {
             totalIncomeLast30Days,
             totalExpensesLast30Days,
             totalIncomeLast7Days,
-            totalExpensesLast7Days
+            totalExpensesLast7Days,
+            totalBudget,
+            totalSpent
         });
 
     } catch (error) {

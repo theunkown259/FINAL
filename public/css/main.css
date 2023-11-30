@@ -167,6 +167,10 @@ body {
 #timePeriodForm{
     padding-top: 10%;
 }
+#categoryForm{
+    padding-left: 50px;
+}
+
 .habit-spending{
     padding-left: 40px;
     padding-right: 40px;
@@ -175,7 +179,12 @@ body {
 }
 .recent-history{
     grid-column: 1;
+}
+#data-history{
     margin-top: -80%;
+}
+#no-data-history{
+    margin-top: 0%;
 }
 #totalBalance{
     font-size: 2em;

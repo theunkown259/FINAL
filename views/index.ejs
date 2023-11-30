@@ -64,124 +64,21 @@
     <div class="wrapper">
         <div class="container">
             <div class="total-amount-container">
-                <h3>Total Balance </h3>
-                <span id="totalBalance" class="<%= totalBalance < 0 ? 'negative-balance' : 'positive-balance' %>">$ <%= totalBalance %></span>
-                <a href="##"><button>Is there a problem? Fix it</button></a>
-            </div>            
-            <div class="recent-history">
-                <h3>History</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>Type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% last5Transactions.forEach(function(transaction) { %>
-                            <tr>
-                                <td>
-                                    <% if (transaction.Transactions.Date) { %>
-                                        <%= transaction.Transactions.Date %>
-                                    <% } else { %>
-                                        Date Not Available
-                                    <% } %>
-                                </td>
-                                <td><%= transaction.Transactions.Amount %></td>
-                                <td><%= transaction.Transactions.Type %></td>
-                            </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
-                <a href="##"><button>See More</button></a>
-            </div>            
-            <div class="budget-chart">
-                <h3>Chart</h3>
-                <canvas id="budget-chart"></canvas>
-                <script>// Define the data for the chart
-                    var data = {
-                        labels: ['Expenses', 'Budget'],
-                        datasets: [{
-                            label: 'Amount',
-                            data: [400, 650],
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)'
-                            ],
-                            borderWidth: 2
-                        }]
-                    };
-                    
-                    // Define the options for the chart
-                    var options = {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    };
-                    
-                    // Create the chart
-                    var chart1 = document.getElementById('budget-chart').getContext('2d');
-                    var myChart = new Chart(chart1, {
-                        type: 'bar',
-                        data: data,
-                        options:{
-                            legend: false,
-                            datalabels: false,
-                            noData: {
-                            text: 'No Data to Show',
-                            fontSize: 16,
-                            fontStyle: 'bold'
-                            }
-                        }
-                    });
-                    </script>
-            </div>
-            <div class="remaning-budget">
-                <h1>Budget Categories</h1>
-                <form action="/" method="get" id="categoryForm">
-                    <label for="categoryCount">Select categories shown</label>
-                    <select id="categoryCount" name="count" onchange="updateLocalStorage(); document.getElementById('categoryForm').submit();">
-                        <option value="1" <%= count === 1 ? 'selected' : '' %>>1</option>
-                        <option value="2" <%= count === 2 ? 'selected' : '' %>>2</option>
-                        <option value="3" <%= count === 3 ? 'selected' : '' %>>3</option>
-                    </select>
-                </form>
-                <table>
-                    <tr>
-                        <th>Category</th>
-                        <th>Budget</th>
-                        <th>Spent</th>
-                        <th>Remaining Budget</th>
-                    </tr>
-                        <% categoriesWithRemainingBudget.forEach(category => { %>
-                    <tr>
-                        <td><%= category.name %></td>
-                        <td><%= category.budget %></td>
-                        <td><%= category.spent %></td>
-                        <td>
-                    <% if (category.remainingBudget <= 0) { %>
-                        <span style="color: red;"><%= category.remainingBudget %> (Over Budget)</span>
-                    <% } else { %>
-                        <%= category.remainingBudget %>
-                    <% } %>
-                        </td>
-                    </tr>
-                 <% }); %>
-                </table>
-            </div>
+            <h3>Total Balance </h3>
+            <% if (transactions && transactions.length > 0) { %>
+            <span id="totalBalance" class="<%= totalBalance < 0 ? 'negative-balance' : 'positive-balance' %>">$ <%= totalBalance %></span>
+            <% } else { %>
+                <p id = "no-data">No Data to Show</p>
+            <% } %>
+            <a href="##"><button>Is there a problem? Fix it</button></a>
+            </div>        
             <div class="expense-category">
-                <h1>Expense in Each Category</h1>
+                <h1>Category Expenses</h1>
+                <% if (transactions && transactions.length > 0) { %>
                 <canvas id="myPieChart"></canvas>
-            
+                <% } else { %>
+                        <p id = "no-data">No Data to Show</p>
+                <% } %>
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
                         var data = {
@@ -220,12 +117,19 @@
                         var myPieChart = new Chart(chart2, {
                             type: 'pie',
                             data: data,
+                            options:{
+                                plugins:{
+                                    legend:{
+                                        position:'bottom'
+                                    }
+                                }
+                            }
                         });
                     });
                 </script>
             </div> 
-            <div class="monthly-spending">
-                <h3>Chart</h3>
+            <div class="habit-spending">
+                <h3>Income Vs. Expenses</h3>
                 <% if (transactions && transactions.length > 0) { %>
                     <canvas id="myChart"></canvas>
                 <% } else { %>
@@ -283,6 +187,140 @@
                 }
                 </script>
             </div>
+            <div class="recent-history">
+              <h3>Recent History</h3>
+              <table class = "history">
+                  <thead>
+                      <tr>
+                          <th>Date</th>
+                          <th>Amount</th>
+                          <th>Type</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <% last5Transactions.forEach(function(transaction) { %>
+                          <tr>
+                              <td>
+                                  <% if (transaction.Transactions.Date) { %>
+                                      <%= transaction.Transactions.Date %>
+                                  <% } else { %>
+                                      Date Not Available
+                                  <% } %>
+                              </td>
+                              <td><%= transaction.Transactions.Amount %></td>
+                              <td><%= transaction.Transactions.Type %></td>
+                          </tr>
+                      <% }); %>
+                  </tbody>
+              </table>
+              <% if (transactions && transactions.length > 0) { %>
+                  <% } else { %>
+                      <p id = "no-data">No Data to Show</p>
+                  <% } %>
+              <a href="##"><button>See More</button></a>
+            </div>
+            <div class="budget-chart">
+              <% if (transactions && transactions.length > 0) { %>
+              <canvas id="budget-chart"></canvas>
+              <% } else { %>
+                  <p id = "no-data">No Data to Show</p>
+              <% } %>
+              <script>
+                  
+                  <% let totalBudget = 0; %>
+                  <% let totalSpent = 0; %>
+
+                  <% sortedCategories.forEach(category => { %>
+                  <% totalBudget += category.budget; %>
+                  <% totalSpent += category.spent; %>
+                  <% }); %>;
+
+                  
+                  var data = {
+                      labels: ['Total Spent', 'Total Budget Amount'],
+                      datasets: [{
+                          label: '',
+                          data: [<%= totalSpent %>, <%= totalBudget %>],
+                          backgroundColor: [
+                              'rgba(255, 99, 132, 0.2)',
+                              'rgba(54, 162, 235, 0.2)'
+                          ],
+                          borderColor: [
+                              'rgba(255, 99, 132, 1)',
+                              'rgba(54, 162, 235, 1)'
+                          ],
+                          borderWidth: 2
+                      }]
+                  };
+                  
+
+                  var chart1 = document.getElementById('budget-chart').getContext('2d');
+                  var myChart = new Chart(chart1, {
+                      type: 'bar',
+                      data: data,
+                      options:{
+                          plugins:{
+                              legend:{
+                                  display:false
+                              }
+                          },        scales: {
+            y: {
+                ticks: {
+                    maxRotation: 10,
+                    minRotation: 10
+                }
+            }
+        },
+                          indexAxis:"y",
+                          datalabels: false,
+                          barThickness:25,
+                          maintainAspectRatio: false,
+                          noData: {
+                          text: 'No Data to Show',
+                          fontSize: 16,
+                          fontStyle: 'bold'
+                          }
+                      }
+                  });
+                  </script>
+          </div>
+            <div class="remaning-budget">
+              <h1>Budget Categories</h1>
+              <form action="/" method="get" id="categoryForm">
+                  <label for="categoryCount">Select categories shown</label>
+                  <select id="categoryCount" name="count" onchange="updateLocalStorage(); document.getElementById('categoryForm').submit();">
+                      <option value="1" <%= count === 1 ? 'selected' : '' %>>1</option>
+                      <option value="2" <%= count === 2 ? 'selected' : '' %>>2</option>
+                      <option value="3" <%= count === 3 ? 'selected' : '' %>>3</option>
+                  </select>
+              </form>
+              <% if (transactions && transactions.length > 0) { %>
+              <table>
+                  <tr>
+                      <th>Category</th>
+                      <th>Budget</th>
+                      <th>Spent</th>
+                      <th>Remaining Budget</th>
+                  </tr>
+                      <% categoriesWithRemainingBudget.forEach(category => { %>
+                  <tr>
+                      <td><%= category.name %></td>
+                      <td><%= category.budget %></td>
+                      <td><%= category.spent %></td>
+                      <td>
+                  <% if (category.remainingBudget <= 0) { %>
+                      <span style="color: red;"><%= category.remainingBudget %> (Over Budget)</span>
+                  <% } else { %>
+                      <%= category.remainingBudget %>
+                  <% } %>
+                      </td>
+                  </tr>
+               <% }); %>
+              </table>
+              <% } else { %>
+                  <p id="no-data">No Data to Show</p>
+              <% } %>
+          </div>    
         </div>
     </div>
     <script>

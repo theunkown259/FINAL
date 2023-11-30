@@ -127,7 +127,7 @@ body {
     }
   }
 .wrapper {
-    width: 100%;
+    width: 100vh;
     font-size: 16px;
     max-width: 43.75em;
     margin: 1em auto;
@@ -136,29 +136,46 @@ body {
 
 .container {
     display: grid;
-    width: 100%;
+    width: 100vw;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto;
     align-items: flex-start;
     grid-gap: 20px;
-    gap: 50px;
+    gap: 20px;
 }
 
-.total-amount-container,.recent-history,.budget-chart,.monthly-spending,.remaning-budget,.expense-category{
+.total-amount-container,.recent-history,.budget-chart,.habit-spending,.remaning-budget,.expense-category{
   background-color: gainsboro;
   padding: 1.25em 0.9em;
   box-shadow: 0 0.6em 1.2em rgba(28, 0, 80, 0.06);
+
+}
+.remaning-budget{
+    grid-column: 1 /3 span;
+    margin-right: -1%;
+}
+.budget-chart{
+    grid-column: 2 /3 span;
+    height: 28vh;
+    width: 100%;
 }
 #no-data{
     padding-left: 40px;
     padding-right: 40px;
     font-weight: 300;
 }
-.monthly-spending{
+#timePeriodForm{
+    padding-top: 10%;
+}
+.habit-spending{
     padding-left: 40px;
     padding-right: 40px;
     font-weight: 300;
     width: max-content;
+}
+.recent-history{
+    grid-column: 1;
+    margin-top: -80%;
 }
 #totalBalance{
     font-size: 2em;
@@ -180,12 +197,12 @@ table {
 th, td {
     padding: 10px;
     border: 1px solid #ddd;
-    text-align: center; /* Center align for td elements */
+    text-align: center; 
 }
 
 th {
     background-color: #f2f2f2;
-    text-align: left; /* Left align for th elements */
+    text-align: center;
 }
 
 .flex {

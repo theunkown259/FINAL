@@ -81,6 +81,7 @@
                 <% } %>
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
+                    const categoryname =['Rent','Dining Out','Healthcare','Miscellaneous','Freelance','Salary']
                         var data = {
                             labels: <%= JSON.stringify(categoryLabels) %>,
                             datasets: [{
@@ -119,6 +120,13 @@
                             data: data,
                             options:{
                                 plugins:{
+                                    tooltip:{
+                                        callbacks:{
+                                            afterTitle: function(context){
+                                                return ` ${categoryname[context[0].dataIndex]}`;
+                                            }
+                                        }
+                                    },
                                     legend:{
                                         position:'bottom'
                                     }
@@ -172,7 +180,7 @@
                 };
 
                 var chart3 = document.getElementById('myChart').getContext('2d');
-                var myChart3 = new Chart(chart3, {
+                var myChart = new Chart(chart3, {
                     type: 'doughnut',
                     data: data,
                     options: options
@@ -277,9 +285,9 @@
                   </script>
           </div>
             <div class="remaning-budget">
-              <h1>Budget Categories</h1>
+              <h1>Concerned Budgets</h1>
               <form action="/" method="get" id="categoryForm">
-                  <label for="categoryCount">Select categories shown</label>
+                  <label for="categoryCount">Select amount of categories shown</label>
                   <select id="categoryCount" name="count" onchange="updateLocalStorage(); document.getElementById('categoryForm').submit();">
                       <option value="1" <%= count === 1 ? 'selected' : '' %>>1</option>
                       <option value="2" <%= count === 2 ? 'selected' : '' %>>2</option>

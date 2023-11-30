@@ -119,6 +119,24 @@ app.get('/', async (req, res) => {
             .filter(transaction => transaction.Transactions.Type === 'Expense')
             .reduce((sum, transaction) => sum + transaction.Transactions.Amount, 0);
 
+            // yearly
+
+            const oneYearAgo = new Date();
+            oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+            
+            const yearlyTransactions = transactions.filter(transaction =>
+                transaction.Transactions.Type === 'Income' ||
+                (transaction.Transactions.Type === 'Expense' && new Date(transaction.Transactions.Date) >= oneYearAgo)
+            );
+            
+            const totalIncomeLastYear = yearlyTransactions
+                .filter(transaction => transaction.Transactions.Type === 'Income')
+                .reduce((sum, transaction) => sum + transaction.Transactions.Amount, 0);
+            
+            const totalExpensesLastYear = yearlyTransactions
+                .filter(transaction => transaction.Transactions.Type === 'Expense')
+                .reduce((sum, transaction) => sum + transaction.Transactions.Amount, 0);
+            
 
 
          //7 days ago
@@ -165,6 +183,8 @@ app.get('/', async (req, res) => {
             totalExpensesLast30Days,
             totalIncomeLast7Days,
             totalExpensesLast7Days,
+            totalIncomeLastYear,
+            totalExpensesLastYear,
             totalBudget,
             totalSpent
         });

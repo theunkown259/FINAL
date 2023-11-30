@@ -163,6 +163,10 @@ body {
     padding-left: 40px;
     padding-right: 40px;
     font-weight: 300;
+    text-align: center;
+}
+.no-data-bar{
+    margin-top: 10%;
 }
 #timePeriodForm{
     padding-top: 10%;

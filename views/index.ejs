@@ -147,6 +147,7 @@
                     <label for="timePeriod">Select Time Period:</label>
                     <select id="timePeriod" name="timePeriod" onchange="updateLocalStorage(); updateChart(this);">
                       <option value="All" <%= timePeriod === 'All' ? 'selected' : '' %>>All Time</option>
+                      <option value="year" <%= timePeriod === 'year' ? 'selected' : '' %>>This Year</option>
                       <option value="7" <%= timePeriod === '7' ? 'selected' : '' %>>Last 7 Days</option>
                       <option value="30" <%= timePeriod === '30' ? 'selected' : '' %>>Last 30 Days</option>
                     </select>
@@ -188,7 +189,7 @@
                 const periodData = document.getElementById('timePeriod');
                 function updateChart(){
                     console.log(document.getElementById('timePeriod').value)
-                    var chartData = periodData.value === 'All' ? '<%=totalIncome %>,<%=totalExpenses %>':periodData.value === '7' ? '<%=totalIncomeLast7Days %>,<%=totalExpensesLast7Days %>':'<%=totalIncomeLast30Days %>,<%=totalExpensesLast30Days %>';
+                    var chartData = periodData.value === 'All' ? '<%=totalIncome %>,<%=totalExpenses %>':periodData.value === 'year' ? '<%=totalIncomeLastYear %>,<%=totalExpensesLastYear %>':periodData.value === '7' ? '<%=totalIncomeLast7Days %>,<%=totalExpensesLast7Days %>':'<%=totalIncomeLast30Days %>,<%=totalExpensesLast30Days %>';
                     console.log(chartData);
                     myChart.data.datasets[0].data = chartData.split(',');
                     myChart.update();
@@ -231,7 +232,7 @@
               <% if (transactions && transactions.length > 0) { %>
               <canvas id="budget-chart"></canvas>
               <% } else { %>
-                  <p id = "no-data">No Data to Show</p>
+                  <p id = "no-data" class="no-data-bar">No Data to Show</p>
               <% } %>
               <script>
 

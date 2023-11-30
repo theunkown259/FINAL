@@ -80,8 +80,12 @@
                         <p id = "no-data">No Data to Show</p>
                 <% } %>
                 <script>
+                        var testarray = [<% tooltiplabelNames.forEach(item => { %>
+                             " <%= item %>",
+                            <% }); %> ]
+                     
+
                     document.addEventListener('DOMContentLoaded', function () {
-                    const categoryname =['Rent','Dining Out','Healthcare','Miscellaneous','Freelance','Salary']
                         var data = {
                             labels: <%= JSON.stringify(categoryLabels) %>,
                             datasets: [{
@@ -123,7 +127,7 @@
                                     tooltip:{
                                         callbacks:{
                                             afterTitle: function(context){
-                                                return ` ${categoryname[context[0].dataIndex]}`;
+                                                return ` ${testarray[context[0].dataIndex]}`;
                                             }
                                         }
                                     },
@@ -155,7 +159,6 @@
                 <script>
                   var totalIncome = <%= totalIncome %>;
                   var totalExpenses = <%= totalExpenses %>;
-
 
                   var data = {
                     labels: ['Income', 'Expenses'],
@@ -232,7 +235,7 @@
               <% if (transactions && transactions.length > 0) { %>
               <canvas id="budget-chart"></canvas>
               <% } else { %>
-                  <p id = "no-data" class="no-data-bar">No Data to Show</p>
+                  <p id = "no-data">No Data to Show</p>
               <% } %>
               <script>
 

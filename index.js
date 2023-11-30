@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
-const { db, Testingmodel } = require('./db.js');
+const { db, Testingmodel,CategoryModel } = require('./db.js');
 
 const app = express();
 app.set('views', './views');
@@ -73,7 +73,23 @@ app.get('/', async (req, res) => {
                 },
             },
         ]).exec();
-        
+        const categories = await CategoryModel.aggregate([
+            { $unwind: '$Categories' },
+            {
+                $match: {
+                    'Categories.UserId': usernum,
+                },
+            },
+            {
+                $project: {
+                    'Categories.CategoryId': 1,
+                    'Categories.Name': 1,
+                    'Categories.Description': 1,
+                    'Categories.Type': 1,
+                    'Categories.UserId': 1,
+                },
+            },
+        ]).exec();
         //recent History
 
         const last5Transactions = await Testingmodel.aggregate([
@@ -159,7 +175,23 @@ app.get('/', async (req, res) => {
 
         // Calculate categoryLabels and categoryAmounts
         const categoryLabels = Array.from(new Set(transactions.map(transaction => transaction.Transactions.CategoryId)));
-        const categoryDescription = Array.from(new Set(transactions.map(transaction => transaction.Transactions.Description))); 
+
+        
+        const newArray = categories.map((categories) => {
+            return [categories.Categories.CategoryId, categories.Categories.Name];
+          });
+ 
+          const tooltiplabelNames = categoryLabels.map((number) => {
+            const matchingEntry = newArray.find((entry) => entry[0] === number);
+            if (matchingEntry) {
+                result =`${(matchingEntry[1])}`;
+              return result; 
+            }
+            return null; 
+          });
+
+
+
         const categoryAmounts = categoryLabels.map(categoryId =>
             transactions
                 .filter(transaction => transaction.Transactions.CategoryId === categoryId)
@@ -178,7 +210,6 @@ app.get('/', async (req, res) => {
             timePeriod,
             categoryLabels,
             categoryAmounts,
-            categoryDescription,
             totalIncomeLast30Days,
             totalExpensesLast30Days,
             totalIncomeLast7Days,
@@ -186,7 +217,8 @@ app.get('/', async (req, res) => {
             totalIncomeLastYear,
             totalExpensesLastYear,
             totalBudget,
-            totalSpent
+            totalSpent,
+            tooltiplabelNames
         });
 
     } catch (error) {

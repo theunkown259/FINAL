@@ -3,12 +3,14 @@ const mongoose = require('mongoose');
 const db = async () => {
     try {
         mongoose.set('strictQuery', false);
-        await mongoose.connect('connection url here plz');
-        console.log('Db Connected');
+        await mongoose.connect('');
+        console.log('DB Connected');
+
     } catch (error) {
-        console.log('DB Connection Error');
-    }
-}
+        console.error('DB Connection Error:', error);
+    } 
+};
+
 
 ///
 
@@ -27,7 +29,25 @@ const Yourmodel = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     Transactions: [transactionSchema],
 });
-const Testingmodel = mongoose.model('mytest', Yourmodel);
+const Testingmodel = mongoose.model('transactions', Yourmodel);
+
 ///
 
-module.exports = {db,Testingmodel}
+
+const categorySchema = new mongoose.Schema({
+    CategoryId: { type: Number},
+    Name: { type: String },
+    Description: { type: String },
+    Type: { type: String },
+    UserId: { type: Number},
+});
+
+const yourModelSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    Categories: [categorySchema],
+});
+
+const CategoryModel = mongoose.model('categories', yourModelSchema);
+
+
+module.exports = {db, Testingmodel, CategoryModel}
